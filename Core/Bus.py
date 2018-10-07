@@ -2,7 +2,7 @@ from .Date import Date
 from datetime import date
 
 class Bus(dict):
-    def __init__(self, BusDate, BusId, Time, Departure, Destination, left_num, Price):
+    def __init__(self, BusDate = "2018-10-07", BusId = 1, Time = "16:55", Departure = "aaa", Destination = "bbb", left_num = 50, Price = 100):
         self['BusDate'] = BusDate
         self['BusId'] = BusId
         self['Time'] = Time

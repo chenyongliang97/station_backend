@@ -21,17 +21,21 @@ if __name__ == '__main__':
     # cursor.insert_one(data1)
     # client.close()
 
-    a = Account('chen', '123')
+    a = Account('liu', '123')
     at = AccountTable()
-    # if at.exist(a):
-    #     print("no")
-    # else:
-    #     at.insert_account(a)
-    #     print("yes")
+    if at.exist(a):
+        print("no")
+    else:
+        at.insert_account(a)
+        print("yes")
 
-    it = IdentityTable()
-    #it.insert(a, '123456789321')
-    list = it.find(a)
-    for i in list:
+    # it = IdentityTable()
+    # it.insert(a, '123456789321')
+    # print(it.delete(a, '123456789321'))
+
+    bt = BusTable()
+    bt.insert_bus(Bus())
+    _list = bt.find_bus('aaa','bbb','2018-10-07')
+    for i in _list:
         print(i)
     # print(at.login(a))

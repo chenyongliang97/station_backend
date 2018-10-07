@@ -2,6 +2,8 @@ from Core.Account import Account
 from pymongo import MongoClient
 PORT = 27017
 
+# 存储用户个人信息表，包括username和password
+
 class AccountTable():
     def __init__(self):
         pass
