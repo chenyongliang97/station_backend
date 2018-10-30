@@ -1,8 +1,12 @@
-from pymongo import MongoClient
+# from pymongo import MongoClient
 from Core.Bus import Bus
-from datetime import date, time, datetime
-from Core.BusTime import BusTime
-from Core.BusTable import BusTable
+# from datetime import date, time, datetime
+# from Core.BusTime import BusTime
+# from Core.BusTable import BusTable
+# from Core.PurchaseTable import PurchaseTable
+import userAction
+import adminAction
+
 import pickle
 import json
 
@@ -21,21 +25,39 @@ if __name__ == '__main__':
     # cursor.insert_one(data1)
     # client.close()
 
-    a = Account('liu', '123')
-    at = AccountTable()
-    if at.exist(a):
-        print("no")
-    else:
-        at.insert_account(a)
-        print("yes")
+    # a = Account('liu', '123')
+    # at = AccountTable()
+    # if at.exist(a):
+    #     print("no")
+    # else:
+    #     at.insert_account(a)
+    #     print("yes")
 
     # it = IdentityTable()
     # it.insert(a, '123456789321')
     # print(it.delete(a, '123456789321'))
 
-    bt = BusTable()
-    bt.insert_bus(Bus())
-    _list = bt.find_bus('aaa','bbb','2018-10-07')
-    for i in _list:
-        print(i)
+    # bt = BusTable()
+    # b = Bus()
+    # condition = {'BusDate': b['BusDate'], 'BusId': b['BusId'], 'Departure': b['Departure'],
+    #              'Destination': b['Destination']}
+    # print(bt.insert_bus(condition, b))
+    # b2 = bt.get_one_bus(b['Departure'], b['Destination'], b['BusDate'], b['BusId'])
+    # print(b2)
+    # # _list = bt.find_bus('aaa', 'bbb', '2018-10-07')
+    # # for i in _list:
+    # #     print(i)
+    # pt = PurchaseTable()
+    # pt.buy('liu', 123456789123, b2)
+    # b2 = bt.get_one_bus(b['Departure'], b['Destination'], b['BusDate'], b['BusId'])
+    # print(b2)
     # print(at.login(a))
+
+    userAction.userCreateAccount('chen', 123)
+    Bus = Bus()
+    adminAction.adminInsertBus(Bus)
+    userAction.userAddCard('chen', 123456789)
+    userAction.userBuyTicket('chen', 123456789, 'aaa', 'bbb', '2018-10-07', 1)
+    list = userAction.userSearchBus('aaa', 'bbb', '2018-10-07')
+    for i in list:
+        print(i)
