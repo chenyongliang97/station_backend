@@ -14,9 +14,15 @@ def userSearchBus(departure, destination, date):
 def userBuyTicket(username, card, departure, destination, date, BusId):
     BT = BusTable()
     PT = PurchaseTable()
-    f = BT.buy(departure, destination, date, BusId)
+    num = 0
+    _list = PT.searchRecord({'username': username, 'card': card, 'departure': departure, 'destination': destination, 'date': date, 'BusId': BusId})
+    for i in _list:
+        num = num + 1
+    if num != 0:
+        return False
+    f, price = BT.buy(departure, destination, date, BusId)
     if f:
-        PT.insertRecord(username, card, departure, destination, date, BusId)
+        PT.insertRecord(username, card, departure, destination, date, BusId, price)
         return True
     else:
         return False
@@ -49,4 +55,27 @@ def userAddCard(username, card):
 def userDeleteCard(username, card):
     IT = IdentityTable()
     return IT.delete(username, card)
+
+# 为username的用户查询其购票记录，返回已经购票了的车辆的信息
+# 可以指定为某个身份证查
+# 注意返回的信息中，票价是原本购买时采用的票价
+# 返回符合条件的巴士列表和数量（要么查username全部的，要么查某张卡的）
+def checkBookList(username, card = -1):
+    PT = PurchaseTable()
+    BT = BusTable()
+    condition = {}
+    condition['username'] = username;
+    if card != -1:
+        condition['card'] = card;
+
+    _list1 = PT.searchRecord(condition)
+    _list2 = []
+    total_num = 0
+    for i in _list1:
+        _list2.append(BT.get_one_bus(i['departure'], i['destination'], i['date'], i['BusId']))
+        _list2[total_num]['Price'] = i['price']
+        total_num = total_num + 1
+
+    return _list2, total_num
+
 

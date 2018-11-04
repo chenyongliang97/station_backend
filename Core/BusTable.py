@@ -23,13 +23,21 @@ class BusTable():
 
     def delete_bus(self, Bus):
         client, cursor = getDatabase('bus_collections')
-        if cursor.find(Bus) == None:
+        condition = {'Departure': Bus['Departure'], 'Destination' : Bus['Destination'], 'BusDate': Bus['BusDate'], 'BusId': Bus['BusId']}
+        if cursor.find(condition) == None:
             client.close()
             return False
         else:
-            cursor.delete_one(Bus)
+            cursor.delete_one(condition)
             client.close()
             return True
+
+    def update_bus(self, OBus, NBus):
+        client, cursor = getDatabase('bus_collections')
+        Ocondition = {'Departure': OBus['Departure'], 'Destination': OBus['Destination'], 'BusDate': OBus['BusDate'], 'BusId': OBus['BusId']}
+
+        cursor.update(Ocondition, NBus)
+        client.close()
 
     # 根据出发地、目的地和日期来找车
     def find_bus(self, departure, destination, date):
@@ -50,10 +58,10 @@ class BusTable():
         condition = {'BusDate': date, 'BusId': BusId, 'Departure': departure,
                      'Destination': destination}
         b = cursor.find_one(condition)
-        if b['left_num'] > 0:
+        if b != None and b['left_num'] > 0:
             b['left_num'] = b['left_num'] - 1
             cursor.update(condition, b)
             client.close()
-            return True
-        return False
+            return True, b['Price']
+        return False, 0
 
