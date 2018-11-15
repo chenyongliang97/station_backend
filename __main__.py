@@ -1,4 +1,4 @@
-# from pymongo import MongoClient
+from pymongo import MongoClient
 from Core.Bus import Bus
 # from datetime import date, time, datetime
 # from Core.BusTime import BusTime
@@ -56,20 +56,22 @@ if __name__ == '__main__':
     userAction.userCreateAccount('chen', 123)
     # BusDate = "2018-10-07", BusId = 1, dTime = "16:55", aTime = "17:50", Departure = "aaa", Destination = "bbb", left_num = 50, Price = 100
 
-    OBus = Bus('2018-10-07',  2, '01:00', '03:00', '出发地', '目的地', 50, 4396)
-    adminAction.adminInsertBus(OBus)
-    userAction.userAddCard('chen', 111111111)
-    userAction.userBuyTicket('chen', 111111111, '出发地', '目的地', '2018-10-07', 1)
-    list = userAction.userSearchBus('出发地', '目的地', '2018-10-07')
-    for i in list:
-        print(i)
-
-    # NBus = Bus('2018-10-07',  2, '01:00', '03:00', '出发地', '目的地', 50, 4396)
-    # NBus['BusId'] = 3
-    # NBus['left_num'] = 49
-    # adminAction.adminUpdateBus(OBus, NBus)
-    _list, tn = userAction.checkBookList('chen', 111111111)
-    print(tn)
-    for i in _list:
-        print(i)
+    OBus = Bus('2018-10-08',  2, '01:00', '03:00', '出发地1', '目的地1', 50, 2200)
+    # adminAction.adminInsertBus(OBus)
+    # userAction.userAddCard('chen', 111111111)
+    userAction.userBuyTicket('chen', 111111111, '出发地1', '目的地1', '2018-10-08', 2)
+    # list = userAction.userSearchBus('出发地', '目的地', '2018-10-07')
+    # for i in list:
+    #     print(i)
+    #
+    # # NBus = Bus('2018-10-07',  2, '01:00', '03:00', '出发地', '目的地', 50, 4396)
+    # # NBus['BusId'] = 3
+    # # NBus['left_num'] = 49
+    # # adminAction.adminUpdateBus(OBus, NBus)
+    # _list, tn = userAction.checkBookList('chen', 111111111)
+    # print(tn)
+    # for i in _list:
+    #     print(i)
     # adminAction.adminDeleteBus('aaa', 'bbb', '2018-10-07', 1)
+    adminAction.adminSearchRecord('undefined', 'undefined', 'undefined', 'undefined')
+

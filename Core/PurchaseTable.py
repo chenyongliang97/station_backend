@@ -1,6 +1,7 @@
 from Core.getDatabase import getDatabase
 from Core.BusTable import BusTable
 from pymongo import MongoClient
+import Date
 
 class PurchaseTable():
 
@@ -45,6 +46,67 @@ class PurchaseTable():
         _list = cursor.find({'departure': departure, 'destination': destination, 'date': date, 'BusId': BusId})
         client.close()
         return _list
+
+    # admin使用，用于查找一定范围的数据
+    def findRangeRecord(self, startDate, endDate, departure, destination):
+        client, cursor = getDatabase('purchase_collections')
+        condition = {}
+        if startDate != "undefined":
+            condition["date"] = {'$gte': startDate, '$lte': endDate}
+        if departure != "undefined":
+            condition["departure"] = departure
+        if destination != "undefined":
+            condition["destination"] = destination
+        _list = cursor.find(condition).sort([('date', 1), ('BusId', 1), ('destination', 1)])
+
+        _list2 = []
+        data = {}
+        date = '1'
+        dest = '1'
+        dep = '1'
+        bid = '1'
+        totalCustomer = 0
+        totalRevenue = 0
+
+        for i in _list:
+            if i['date'] != date or i['destination'] != dest or i['departure'] != dep or i['BusId'] != bid:
+                data['date'] = date
+                data['destination'] = dest
+                data['departure'] = dep
+                data['BusId'] = bid
+                data['totalCustomer'] = totalCustomer
+                data['totalRevenue'] = totalRevenue
+                _list2.append({'date': date, 'destination': dest, 'departure': dep, 'BusId': bid, 'totalCustomer': totalCustomer, 'totalRevenue': totalRevenue})
+                date = i['date']
+                dest = i['destination']
+                dep = i['departure']
+                bid = i['BusId']
+                totalCustomer = 1
+                totalRevenue = i['price']
+            else:
+                totalCustomer = totalCustomer + 1
+                totalRevenue = totalRevenue + i['price']
+
+        _list2.append({'date': date, 'destination': dest, 'departure': dep, 'BusId': bid, 'totalCustomer': totalCustomer,
+             'totalRevenue': totalRevenue})
+
+        for i in range(len(_list2)):
+            if _list2[i]['date'] == '1':
+                del _list2[i]
+                break
+
+        for i in _list2:
+            print(i)
+
+        totalCustomer = 0
+        totalRevenue = 0
+        for i in _list2:
+            totalCustomer = totalCustomer + i['totalCustomer']
+            totalRevenue = totalRevenue + i['totalRevenue']
+        print(totalCustomer, totalRevenue)
+        client.close()
+        return totalCustomer, totalRevenue, _list2
+
 
     # 用户使用
     def searchRecord(self, condition):
