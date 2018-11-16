@@ -13,6 +13,11 @@ class PurchaseTable():
         cursor.insert_one({'username': username, 'card': card, 'departure': departure, 'destination': destination, 'date': date, 'BusId': BusId, 'price': price})
         client.close()
 
+    def deleteOneRecord(self, username, card, departure, destination, date, BusId):
+        client, cursor = getDatabase('purchase_collections')
+        cursor.delete_one({'username': username, 'card': card, 'departure': departure, 'destination': destination, 'date': date, 'BusId': BusId})
+        client.close()
+
     def updateRecord(self, oldRecord, departure = 'undefined', destination = 'undefined', date = 'undefined',
                     BusId = -1):
         client, cursor = getDatabase('purchase_collections')
@@ -112,5 +117,5 @@ class PurchaseTable():
     def searchRecord(self, condition):
         client, cursor = getDatabase('purchase_collections')
         _list = cursor.find(condition)
-        client.close();
+        client.close()
         return _list

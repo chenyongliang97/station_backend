@@ -2,6 +2,9 @@ from Core.BusTable import BusTable
 from Core.PurchaseTable import PurchaseTable
 from Core.AccountTable import AccountTable
 from Core.IdentityTable import IdentityTable
+from Core.DeleteTable import DeleteTable
+from Core.ExpireTable import ExpireTable
+import time
 
 # 定义了用户所能进行的所有动作
 
@@ -78,4 +81,47 @@ def checkBookList(username, card = -1):
 
     return _list2, total_num
 
+# 同上，查询的是delete表（退票表）里面的信息
+def checkDeleteList(username, card = -1):
+    DT = DeleteTable()
+    BT = BusTable()
+    condition = {}
+    condition['username'] = username;
+    if card != -1:
+        condition['card'] = card;
 
+    _list1 = DT.searchRecord(condition)
+    _list2 = []
+    total_num = 0
+    for i in _list1:
+        _list2.append(BT.get_one_bus(i['departure'], i['destination'], i['date'], i['BusId']))
+        _list2[total_num]['Price'] = i['price']
+        total_num = total_num + 1
+    return _list2, total_num
+
+def userDeleteTicket(username, card, departure, destination, date, BusId):
+    BT = BusTable()
+    PT = PurchaseTable()
+    DT = DeleteTable()
+    PT.deleteOneRecord(username, card, departure, destination, date, BusId)
+    DT.insertRecord(username, card, departure, destination, date, BusId, 4396)
+    BT.addOneSeat(departure, destination, date, BusId)
+
+# 在用户登陆时，更新票务信息，将过了期的票转移到ExpireTable中
+def updateTicketInfo(username):
+    BT = BusTable()
+    PT = PurchaseTable()
+    ET = ExpireTable()
+    _list = PT.searchRecord({'username': username}) #找某个用户的所有购买记录
+    for i in _list:
+        b = BT.get_one_bus(i['departure'], i['destination'], i['date'], i['BusId'])
+        ticketTime = b['BusDate'] + b['dTime']
+        currTime = time.strftime('%Y-%m-%d%H:%M', time.localtime(time.time()))
+        if currTime > ticketTime:   #过期票，将记录从perchase表移入到expire表
+            PT.deleteOneRecord(username, i['card'], i['departure'], i['destination'], i['date'], i['BusId'])
+            ET.insertRecord(i)
+
+# 查看已使用的票
+def checkExpireTicket(username):
+    ET = ExpireTable()
+    return ET.showRecord(username)

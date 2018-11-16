@@ -1,7 +1,4 @@
 from Core.getDatabase import getDatabase
-from pymongo import MongoClient
-from Core.Bus import Bus
-PORT = 27017
 
 # Bus表，存放所有bus的信息
 class BusTable():
@@ -20,6 +17,14 @@ class BusTable():
         else:
             client.close()
             return False
+
+    def addOneSeat(self, departure, destination, date, BusId):
+        client, cursor = getDatabase('bus_collections')
+        b = cursor.find_one({'Destination': destination, 'Departure': departure, 'BusDate': date, 'BusId': BusId})
+        t = b['left_num']
+        t = t + 1
+        cursor.update({'Destination': destination, 'Departure': departure, 'BusDate': date, 'BusId': BusId}, {'$set': {'left_num': t}})
+        client.close()
 
     def delete_bus(self, Bus):
         client, cursor = getDatabase('bus_collections')

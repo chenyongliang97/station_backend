@@ -1,5 +1,4 @@
 from Core.getDatabase import getDatabase
-PORT = 27017
 
 # 存储用户个人信息表，包括username和password
 

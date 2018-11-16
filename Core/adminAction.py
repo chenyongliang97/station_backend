@@ -31,7 +31,7 @@ def adminUpdateBus(OBus, NBus):
 
 # 传入的参数为起始日期，终止日期，出发站和终点站
 # 如果上述输入有缺省，用undefined替代。起始日期和终止日期要么同时存在，要么一起缺省，出发站和终点站则无所谓
-# 得到的结果为根据所查信息搜得的乘客总数和营收总金额，以及一个装着符合条件的巴士信息（出发地，目的地，日期，车id，车的总乘客，该车的总营收）
+# 得到的结果为根据所查信息搜得的乘客总数和营收总金额，以及一个装着符合条件的巴士信息（出发地，目的地，日期，车id，车的总乘客，该车的总营收）的列表
 def adminSearchRecord(startDate, endDate, departure, destination):
     PT = PurchaseTable()
     totalCustomer, totalRevenue, _list = PT.findRangeRecord(startDate, endDate, departure, destination)

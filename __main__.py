@@ -5,6 +5,7 @@ from Core.Bus import Bus
 # from Core.BusTable import BusTable
 # from Core.PurchaseTable import PurchaseTable
 import userAction
+import time
 import adminAction
 
 import pickle
@@ -56,10 +57,10 @@ if __name__ == '__main__':
     userAction.userCreateAccount('chen', 123)
     # BusDate = "2018-10-07", BusId = 1, dTime = "16:55", aTime = "17:50", Departure = "aaa", Destination = "bbb", left_num = 50, Price = 100
 
-    OBus = Bus('2018-10-08',  2, '01:00', '03:00', '出发地1', '目的地1', 50, 2200)
+    # OBus = Bus('2018-10-08',  2, '01:00', '03:00', '出发地1', '目的地1', 50, 2200)
     # adminAction.adminInsertBus(OBus)
     # userAction.userAddCard('chen', 111111111)
-    userAction.userBuyTicket('chen', 111111111, '出发地1', '目的地1', '2018-10-08', 2)
+    # userAction.userBuyTicket('chen', 111111111, '出发地1', '目的地1', '2018-10-08', 2)
     # list = userAction.userSearchBus('出发地', '目的地', '2018-10-07')
     # for i in list:
     #     print(i)
@@ -73,5 +74,10 @@ if __name__ == '__main__':
     # for i in _list:
     #     print(i)
     # adminAction.adminDeleteBus('aaa', 'bbb', '2018-10-07', 1)
-    adminAction.adminSearchRecord('undefined', 'undefined', 'undefined', 'undefined')
-
+    # adminAction.adminSearchRecord('undefined', 'undefined', 'undefined', 'undefined')
+    # userAction.userDeleteTicket('chen', 123456789, '出发地', '目的地', '2018-10-07', 1)
+    # print(time.strftime('%Y-%m-%d%H:%M', time.localtime(time.time())))
+    userAction.updateTicketInfo('chen')
+    _list = userAction.checkExpireTicket('chen')
+    for i in _list:
+        print(i)
