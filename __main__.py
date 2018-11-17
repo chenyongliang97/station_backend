@@ -54,7 +54,6 @@ if __name__ == '__main__':
     # print(b2)
     # print(at.login(a))
 
-    userAction.userCreateAccount('chen', 123)
     # BusDate = "2018-10-07", BusId = 1, dTime = "16:55", aTime = "17:50", Departure = "aaa", Destination = "bbb", left_num = 50, Price = 100
 
     # OBus = Bus('2018-10-08',  2, '01:00', '03:00', '出发地1', '目的地1', 50, 2200)
@@ -77,7 +76,5 @@ if __name__ == '__main__':
     # adminAction.adminSearchRecord('undefined', 'undefined', 'undefined', 'undefined')
     # userAction.userDeleteTicket('chen', 123456789, '出发地', '目的地', '2018-10-07', 1)
     # print(time.strftime('%Y-%m-%d%H:%M', time.localtime(time.time())))
-    userAction.updateTicketInfo('chen')
-    _list = userAction.checkExpireTicket('chen')
-    for i in _list:
-        print(i)
+    userAction.userCreateAccount('liang', 123, 1)
+    print(userAction.userGetLevel('liang'))

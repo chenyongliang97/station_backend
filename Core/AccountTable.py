@@ -16,10 +16,16 @@ class AccountTable():
             return True
 
 
-    def insert_account(self, username, password):
+    def insert_account(self, username, password, level):
         client, cursor = getDatabase('account_collections')
-        cursor.insert_one({'username': username, 'password': password})
+        cursor.insert_one({'username': username, 'password': password, 'level': level})
         client.close()
+
+    def getLevel(self, username):
+        client, cursor = getDatabase('account_collections')
+        a = cursor.find_one({'username': username})
+        client.close()
+        return a['level']
 
     def login(self, username, password):
         client, cursor = getDatabase('account_collections')

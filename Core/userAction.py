@@ -30,18 +30,23 @@ def userBuyTicket(username, card, departure, destination, date, BusId):
     else:
         return False
 
+# 返回username名字的用户的等级，分成0，1，2三个等级
+def userGetLevel(username):
+    AT = AccountTable()
+    return AT.getLevel(username)
+
 # 登陆名为username的用户,验证password是否正确，返回0：不存在账号；1：密码错误；2：登陆成功
 def userLogIn(username, password):
     AT = AccountTable()
     return AT.login(username, password)
 
-# 创建名为username，密码为password的用户，返回成功或失败（已存在名为username的用户）
-def userCreateAccount(username, password):
+# 创建名为username，密码为password的用户，返回成功或失败（已存在名为username的用户），level是用户等级
+def userCreateAccount(username, password, level):
     AT = AccountTable()
     if AT.exist(username):
         return False
     else:
-        AT.insert_account(username, password)
+        AT.insert_account(username, password, level)
         return True
 
 # 返回usernmae用户绑定的所有身份证
