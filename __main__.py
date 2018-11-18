@@ -78,3 +78,7 @@ if __name__ == '__main__':
     # print(time.strftime('%Y-%m-%d%H:%M', time.localtime(time.time())))
     userAction.userCreateAccount('liang', 123, 1)
     print(userAction.userGetLevel('liang'))
+    userAction.userAddCard('liang', 440782199707088014, '陈泳良', 15902056460)
+    _list = userAction.userShowCard('liang')
+    for i in _list:
+        print(i)

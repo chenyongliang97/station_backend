@@ -14,11 +14,11 @@ class IdentityTable():
         return _list
 
     # 为一个用户添加一个身份证
-    def insert(self, username, card):
+    def insert(self, username, card, name, phone):
         client, cursor = getDatabase('identity_collections')
 
         if cursor.find_one({'username': username, 'card': card}) == None:
-            cursor.insert_one({'username': username, 'card': card})
+            cursor.insert_one({'username': username, 'card': card, 'name': name, 'phone': phone})
         client.close()
 
     # 为一个用户删除一个身份证

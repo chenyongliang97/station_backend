@@ -55,9 +55,9 @@ def userShowCard(username):
     return IT.find(username)
 
 # 为username的用户添加一张卡card
-def userAddCard(username, card):
+def userAddCard(username, card, name, phone):
     IT = IdentityTable()
-    IT.insert(username, card)
+    IT.insert(username, card, name, phone)
 
 # 为username的用户删除一张卡card
 def userDeleteCard(username, card):
