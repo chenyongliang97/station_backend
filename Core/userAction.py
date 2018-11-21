@@ -14,21 +14,22 @@ def userSearchBus(departure, destination, date):
     return BT.find_bus(departure, destination, date)
 
 # 为username用户使用card购买符合条件的票，返回成功或失败
+# 0: 因为该card的人已经买过所以失败；1：没有余票返回失败；2：成功
 def userBuyTicket(username, card, departure, destination, date, BusId):
     BT = BusTable()
     PT = PurchaseTable()
     num = 0
-    _list = PT.searchRecord({'username': username, 'card': card, 'departure': departure, 'destination': destination, 'date': date, 'BusId': BusId})
+    _list = PT.searchRecord({'card': card, 'departure': departure, 'destination': destination, 'date': date, 'BusId': BusId})
     for i in _list:
         num = num + 1
     if num != 0:
-        return False
+        return 0
     f, price = BT.buy(departure, destination, date, BusId)
     if f:
         PT.insertRecord(username, card, departure, destination, date, BusId, price)
-        return True
+        return 2
     else:
-        return False
+        return 1
 
 # 返回username名字的用户的等级，分成0，1，2三个等级
 def userGetLevel(username):
@@ -108,8 +109,11 @@ def userDeleteTicket(username, card, departure, destination, date, BusId):
     BT = BusTable()
     PT = PurchaseTable()
     DT = DeleteTable()
+    condition = {'username': username, 'card': card, 'departure': departure, 'destination': destination, 'date': date, 'BusId': BusId}
+    p = PT.searchRecord(condition);
+    i = p[0]
     PT.deleteOneRecord(username, card, departure, destination, date, BusId)
-    DT.insertRecord(username, card, departure, destination, date, BusId, 4396)
+    DT.insertRecord(username, card, departure, destination, date, BusId, i['price'])
     BT.addOneSeat(departure, destination, date, BusId)
 
 # 在用户登陆时，更新票务信息，将过了期的票转移到ExpireTable中

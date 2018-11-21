@@ -20,10 +20,16 @@ class BusTable():
 
     def addOneSeat(self, departure, destination, date, BusId):
         client, cursor = getDatabase('bus_collections')
-        b = cursor.find_one({'Destination': destination, 'Departure': departure, 'BusDate': date, 'BusId': BusId})
-        t = b['left_num']
-        t = t + 1
-        cursor.update({'Destination': destination, 'Departure': departure, 'BusDate': date, 'BusId': BusId}, {'$set': {'left_num': t}})
+        _id = cursor.find_one({'Destination': destination, 'Departure': departure, 'BusDate': date, 'BusId': BusId})['_id']
+        cursor.find_and_modify(
+            query={
+                '_id': _id,
+            },
+
+            update={
+                '$inc': {'left_num': 1}
+            }
+        )
         client.close()
 
     def delete_bus(self, Bus):
@@ -62,11 +68,21 @@ class BusTable():
         client, cursor = getDatabase('bus_collections')
         condition = {'BusDate': date, 'BusId': BusId, 'Departure': departure,
                      'Destination': destination}
-        b = cursor.find_one(condition)
-        if b != None and b['left_num'] > 0:
-            b['left_num'] = b['left_num'] - 1
-            cursor.update(condition, b)
-            client.close()
+        _id = cursor.find_one(condition)['_id']
+        b = cursor.find_and_modify(
+            query={
+                '_id': _id,
+                'left_num': {'$gt': 0}
+            },
+
+            update={
+                '$inc': {'left_num': -1}
+            }
+        )
+        client.close()
+        if b != None:
             return True, b['Price']
-        return False, 0
+        else:
+            return False, 0
+
 

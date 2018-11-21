@@ -76,9 +76,5 @@ if __name__ == '__main__':
     # adminAction.adminSearchRecord('undefined', 'undefined', 'undefined', 'undefined')
     # userAction.userDeleteTicket('chen', 123456789, '出发地', '目的地', '2018-10-07', 1)
     # print(time.strftime('%Y-%m-%d%H:%M', time.localtime(time.time())))
-    userAction.userCreateAccount('liang', 123, 1)
-    print(userAction.userGetLevel('liang'))
-    userAction.userAddCard('liang', 440782199707088014, '陈泳良', 15902056460)
-    _list = userAction.userShowCard('liang')
-    for i in _list:
-        print(i)
+    userAction.userBuyTicket('liang', 440782199707088014, '出发地1', '目的地1', '2018-10-08', 2)
+    userAction.userDeleteTicket('liang', 440782199707088014, '出发地1', '目的地1', '2018-10-08', 2)
