@@ -4,6 +4,7 @@ from Core.Bus import Bus
 # from Core.BusTime import BusTime
 # from Core.BusTable import BusTable
 # from Core.PurchaseTable import PurchaseTable
+from Core.test import test
 import userAction
 import time
 import adminAction
@@ -76,5 +77,14 @@ if __name__ == '__main__':
     # adminAction.adminSearchRecord('undefined', 'undefined', 'undefined', 'undefined')
     # userAction.userDeleteTicket('chen', 123456789, '出发地', '目的地', '2018-10-07', 1)
     # print(time.strftime('%Y-%m-%d%H:%M', time.localtime(time.time())))
-    userAction.userBuyTicket('liang', 440782199707088014, '出发地1', '目的地1', '2018-10-08', 2)
-    userAction.userDeleteTicket('liang', 440782199707088014, '出发地1', '目的地1', '2018-10-08', 2)
+    # userAction.userBuyTicket('liang', 440782199707088014, '出发地1', '目的地1', '2018-10-08', 2)
+    # userAction.userDeleteTicket('liang', 440782199707088014, '出发地1', '目的地1', '2018-10-08', 2)
+
+    # OBus = Bus('2018-10-09', 2, '01:00', '03:00', 'ahaha', '目的地', 50, 888)
+    # adminAction.adminInsertBus(OBus)
+    # userAction.userBuyTicket('liang', 440782199707088014, 'ahaha', '目的地', '2018-10-07', 2)
+
+
+    _list = userAction.userSearchBus('AA','BB','2018-12-1555')
+    for i in _list:
+        print('1')

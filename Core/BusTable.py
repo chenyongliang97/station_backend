@@ -35,19 +35,34 @@ class BusTable():
     def delete_bus(self, Bus):
         client, cursor = getDatabase('bus_collections')
         condition = {'Departure': Bus['Departure'], 'Destination' : Bus['Destination'], 'BusDate': Bus['BusDate'], 'BusId': Bus['BusId']}
-        if cursor.find(condition) == None:
+        client1, cursor1 = getDatabase('purchase_collections')
+        condition2 = {'departure': Bus['Departure'], 'destination': Bus['Destination'], 'date': Bus['BusDate'], 'BusId': Bus['BusId']}
+        if cursor.find(condition) == None or cursor1.find_one(condition2) != None:
             client.close()
+            client1.close()
             return False
         else:
             cursor.delete_one(condition)
             client.close()
+            client1.close()
             return True
 
     def update_bus(self, OBus, NBus):
         client, cursor = getDatabase('bus_collections')
         Ocondition = {'Departure': OBus['Departure'], 'Destination': OBus['Destination'], 'BusDate': OBus['BusDate'], 'BusId': OBus['BusId']}
+        _id = cursor.find_one(Ocondition)['_id']
+        m = NBus['left_num'] - OBus['left_num']
+        cursor.find_and_modify(
+            query={
+                '_id': _id
+            },
 
-        cursor.update(Ocondition, NBus)
+            update={
+                '$inc': {'left_num': m},
+                '$set': {'BusId': NBus['BusId']},
+                '$set': {'Price': NBus['Price']}
+            }
+        )
         client.close()
 
     # 根据出发地、目的地和日期来找车
@@ -68,17 +83,23 @@ class BusTable():
         client, cursor = getDatabase('bus_collections')
         condition = {'BusDate': date, 'BusId': BusId, 'Departure': departure,
                      'Destination': destination}
-        _id = cursor.find_one(condition)['_id']
-        b = cursor.find_and_modify(
-            query={
-                '_id': _id,
-                'left_num': {'$gt': 0}
-            },
 
-            update={
-                '$inc': {'left_num': -1}
-            }
-        )
+        b = None
+        try:
+            _id = cursor.find_one(condition)['_id']
+            b = cursor.find_and_modify(
+                query={
+                    '_id': _id,
+                    'left_num': {'$gt': 0}
+                },
+
+                update={
+                    '$inc': {'left_num': -1}
+                }
+            )
+        except TypeError:
+            return False, 0
+
         client.close()
         if b != None:
             return True, b['Price']

@@ -63,7 +63,8 @@ class PurchaseTable():
         if destination != "undefined":
             condition["destination"] = destination
         _list = cursor.find(condition).sort([('date', 1), ('BusId', 1), ('destination', 1)])
-
+        if cursor.find_one(condition) == None:
+            return 0, 0, [], []
         _list2 = []
         data = {}
         date = '1'
@@ -100,17 +101,29 @@ class PurchaseTable():
                 del _list2[i]
                 break
 
-        for i in _list2:
-            print(i)
+        _list3 = []
+        date = _list2[0]['date']
+        dateTotalRevenue = 0
+        dateTotalCustomer = 0
+        for i in range(len(_list2)):
+            if date == _list2[i]['date']:
+                dateTotalCustomer = dateTotalCustomer + _list2[i]['totalCustomer']
+                dateTotalRevenue = dateTotalRevenue + _list2[i]['totalRevenue']
+            else:
+                _list3.append({'date': date, 'totalCustomer': dateTotalCustomer, 'totalRevenue': dateTotalRevenue})
+                date = _list2[i]['date']
+                dateTotalCustomer = _list2[i]['totalCustomer']
+                dateTotalRevenue = _list2[i]['totalRevenue']
+
+        _list3.append({'date': date, 'totalCustomer': dateTotalCustomer, 'totalRevenue': dateTotalRevenue})
 
         totalCustomer = 0
         totalRevenue = 0
         for i in _list2:
             totalCustomer = totalCustomer + i['totalCustomer']
             totalRevenue = totalRevenue + i['totalRevenue']
-        print(totalCustomer, totalRevenue)
         client.close()
-        return totalCustomer, totalRevenue, _list2
+        return totalCustomer, totalRevenue, _list2, _list3
 
 
     # 用户使用

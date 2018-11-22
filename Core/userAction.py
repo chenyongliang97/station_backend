@@ -90,7 +90,6 @@ def checkBookList(username, card = -1):
 # 同上，查询的是delete表（退票表）里面的信息
 def checkDeleteList(username, card = -1):
     DT = DeleteTable()
-    BT = BusTable()
     condition = {}
     condition['username'] = username;
     if card != -1:
@@ -100,8 +99,7 @@ def checkDeleteList(username, card = -1):
     _list2 = []
     total_num = 0
     for i in _list1:
-        _list2.append(BT.get_one_bus(i['departure'], i['destination'], i['date'], i['BusId']))
-        _list2[total_num]['Price'] = i['price']
+        _list2.append(i)
         total_num = total_num + 1
     return _list2, total_num
 
@@ -110,7 +108,7 @@ def userDeleteTicket(username, card, departure, destination, date, BusId):
     PT = PurchaseTable()
     DT = DeleteTable()
     condition = {'username': username, 'card': card, 'departure': departure, 'destination': destination, 'date': date, 'BusId': BusId}
-    p = PT.searchRecord(condition);
+    p = PT.searchRecord(condition)
     i = p[0]
     PT.deleteOneRecord(username, card, departure, destination, date, BusId)
     DT.insertRecord(username, card, departure, destination, date, BusId, i['price'])

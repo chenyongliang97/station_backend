@@ -16,9 +16,6 @@ class Bus(dict):
         self.Price = p
 
     def set_time(self, BusDate, t1, t2):
-        # if int(BusDate.year + BusDate.month + BusDate.day + t1) < int(self.BusDate.year + self.BusDate.month + self.BusDate.day + self.Time):
-        #     return False
-        # else:
         self.BusDate = BusDate
         self.dTime = t1
         self.aTime = t2
